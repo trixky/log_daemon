@@ -28,8 +28,6 @@ void daemonize(void)
     g_reporter.log("Entering Daemon mode.");
 
     int pid = fork();
-    std::cout << pid << std::endl;
-
     if (pid < 0)
         _exit(EXIT_FAILURE);
     if (pid > 0)
