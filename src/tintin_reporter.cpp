@@ -1,8 +1,11 @@
 #include "tintin_reporter.hpp"
 #include "utils.hpp"
 
+Tintin_reporter g_reporter;
+
 Tintin_reporter::Tintin_reporter(void)
 {
+    this->file = -1;
     // Create the default log file if it doesn't exist
     mkdir(DEFAULT_PATH_DIRECTORY, 0755);
 
@@ -12,6 +15,8 @@ Tintin_reporter::Tintin_reporter(void)
 
 Tintin_reporter::Tintin_reporter(const char *path)
 {
+    this->file = -1;
+
     // Set the path of the log file
     this->setpath(path);
 }
@@ -34,7 +39,7 @@ void Tintin_reporter::setpath(const char *path)
 
 void Tintin_reporter::log(std::string message)
 {
-    if (!this->file)
+    if (this->file < 0)
         // If the log file is not set
         fprintf(stderr, "log file path not set\n");
     else

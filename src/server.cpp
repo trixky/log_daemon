@@ -1,11 +1,7 @@
-#include <iostream>
-#include "tintin_reporter.hpp"
+#include "server.hpp"
 
-int main()
+void start_server(void)
 {
-    Tintin_reporter reporter = Tintin_reporter();
-
-    reporter.log((const char *)"test");
-
-    return 0;
+    g_reporter.log("Creating server.");
+    g_reporter.log("Server created.");
 }

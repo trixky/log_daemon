@@ -24,4 +24,6 @@ public:
     void log(std::string log);
 };
 
+extern Tintin_reporter g_reporter;
+
 #endif
