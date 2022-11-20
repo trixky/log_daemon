@@ -6,24 +6,29 @@
 #include "locker.hpp"
 #include "server.hpp"
 
-void handle_signale(int sig)
+/* handle_shutdown_signale handles shutdown signals */
+void handle_shutdown_signale(int sig)
 {
     g_reporter.info("Received shutdown signal");
     close_server();
     exit(EXIT_SUCCESS);
 }
 
-void register_signals(void)
+/* register_shutdown_signals registers shutdown signals */
+void register_shutdown_signals(void)
 {
-    signal(SIGINT, handle_signale);
-    signal(SIGQUIT, handle_signale);
-    signal(SIGTERM, handle_signale);
+    signal(SIGINT, handle_shutdown_signale);
+    signal(SIGQUIT, handle_shutdown_signale);
+    signal(SIGTERM, handle_shutdown_signale);
 }
 
+/* daemonize daemonizes the program */
 void daemonize(void)
 {
     g_reporter.info("Entering Daemon mode.");
 
+    // Fork (daemonize) the program
+    // By killing the parent
     int pid = fork();
     if (pid < 0)
         _exit(EXIT_FAILURE, false, false);
@@ -31,7 +36,10 @@ void daemonize(void)
         _exit(EXIT_SUCCESS, false, false);
     if (setsid() < 0)
         _exit(EXIT_FAILURE, false, false);
+
     umask(0);
+
+    // Hide outputs
     fclose(stdout);
     fclose(stderr);
     fclose(stdin);
@@ -43,7 +51,7 @@ int main()
 {
     lock();
     g_reporter.info("Started.");
-    register_signals();
+    register_shutdown_signals();
     daemonize();
     create_server();
     start_server();

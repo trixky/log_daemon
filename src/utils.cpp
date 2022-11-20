@@ -2,6 +2,7 @@
 
 // https://stackoverflow.com/questions/8343676/how-to-get-current-date-and-time
 
+/* get_time gets and serializes the time in a suitable format */
 std::string get_time()
 {
     // Get the current time
@@ -16,16 +17,23 @@ std::string get_time()
     return current_time;
 }
 
+/* _exit exit the program properly */
 void _exit(int status, bool unlock_mode, bool server_mode)
 {
+    g_reporter.info("Quitting.");
+
     if (unlock_mode)
     {
+        // If in unlock mode
+        // Unlock the lock file
         unlock();
     }
-    g_reporter.info("Quitting.");
     if (server_mode)
     {
+        // If in server mode
+        // Close the server
         close_server();
     }
+
     exit(status);
 }
