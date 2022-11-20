@@ -159,7 +159,6 @@ void start_server()
 
     while (1)
     {
-        sleep(1);
         max_sock = g_server_fd;
         FD_ZERO(&fd_list);
         FD_SET(g_server_fd, &fd_list);
