@@ -111,7 +111,6 @@ void create_server(void)
     if ((g_server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         g_reporter.info("Failed to create the main socket\n");
-        fprintf(stderr, "Failed to create the main socket\n");
         _exit(EXIT_FAILURE, true, false);
     }
 
@@ -121,7 +120,6 @@ void create_server(void)
     {
         close_server();
         g_reporter.info("Failed to set options to the main socket\n");
-        fprintf(stderr, "Failed to set options to the main socket\n");
         _exit(EXIT_FAILURE, true, true);
     }
 
@@ -133,7 +131,6 @@ void create_server(void)
     {
         close_server();
         g_reporter.info("Failed to bind the main socket\n");
-        fprintf(stderr, "Failed to bind the main socket\n");
         _exit(EXIT_FAILURE, true, true);
     }
 
@@ -141,7 +138,6 @@ void create_server(void)
     {
         close_server();
         g_reporter.info("Failed to listen the main socket\n");
-        fprintf(stderr, "Failed to listen the main socket\n");
         _exit(EXIT_FAILURE, true, true);
     }
 
@@ -179,7 +175,6 @@ void start_server()
             close_server();
             const std::string select_error_msg = std::string("Failed to select: " + (std::string(strerror(errno))));
             g_reporter.info(select_error_msg);
-            fprintf(stderr, "%s", select_error_msg.c_str());
             _exit(EXIT_FAILURE, true, true);
             return;
         }
