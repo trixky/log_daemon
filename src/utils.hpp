@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <chrono>
-#include <ctime>
 #include "locker.hpp"
 #include "tintin_reporter.hpp"
 #include "server.hpp"

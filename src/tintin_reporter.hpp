@@ -4,8 +4,6 @@
 
 #include <iostream>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
 
 #define DEFAULT_PATH_DIRECTORY "/var/log/matt_daemon"
 #define DEFAULT_PATH "/var/log/matt_daemon/matt_daemon.log"

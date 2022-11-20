@@ -1,6 +1,7 @@
 #include <iostream>
 #include <signal.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 #include "tintin_reporter.hpp"
 #include "locker.hpp"

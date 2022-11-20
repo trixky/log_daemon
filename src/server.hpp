@@ -2,9 +2,9 @@
 
 #define SERVER_HPP
 
+#include <iostream>
 #include <arpa/inet.h>
 #include <vector>
-#include <syslog.h>
 #include <string.h>
 #include "tintin_reporter.hpp"
 #include "utils.hpp"
