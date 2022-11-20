@@ -158,7 +158,7 @@ void start_server()
             close_server();
             const std::string select_error_msg = std::string("Failed to select: " + (std::string(strerror(errno))));
             g_reporter.info(select_error_msg);
-            fprintf(stderr, select_error_msg.c_str());
+            fprintf(stderr, "%s", select_error_msg.c_str());
             _exit(EXIT_FAILURE, true, true);
             return;
         }
