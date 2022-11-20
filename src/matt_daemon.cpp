@@ -45,7 +45,7 @@ void daemonize(void)
     fclose(stderr);
     fclose(stdin);
 
-    g_reporter.info(std::string("Daemon Started. PID " + (std::to_string(getpid()))));
+    g_reporter.info(std::string("Daemon Started. (pid " + (std::to_string(getpid()))) + ")");
 }
 
 int main()
