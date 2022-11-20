@@ -106,7 +106,6 @@ void handle_request(std::vector<int> &client_socks, fd_set &fd_list)
                 {
                     // If the message is the "quit" command
                     // Quit the program/server
-                    close_server();
                     g_reporter.info("Request quit.");
                     _exit(EXIT_SUCCESS, true, true);
                 }
@@ -199,11 +198,9 @@ void start_server()
         }
         if (select(max_sock + 1, &fd_list, NULL, NULL, NULL) < 0)
         {
-            close_server();
             const std::string select_error_msg = std::string("Failed to select: " + (std::string(strerror(errno))));
             g_reporter.info(select_error_msg);
             _exit(EXIT_FAILURE, true, true);
-            return;
         }
         if (FD_ISSET(g_server_fd, &fd_list))
             // If the client is not known
