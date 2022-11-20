@@ -15,6 +15,9 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 CPPFLAGS ?= $(INC_FLAGS) -MMD -MP
 
+all:
+	@make $(BUILD_DIR)/$(TARGET_EXEC)
+
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
@@ -41,6 +44,10 @@ clean:
 
 fclean:
 	$(RM) -r $(BUILD_DIR)
+
+re:
+	@make fclean
+	@make all
 
 -include $(DEPS)
 
