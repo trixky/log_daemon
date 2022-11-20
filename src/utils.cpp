@@ -15,3 +15,11 @@ std::string get_time()
 
     return current_time;
 }
+
+void _exit(int status)
+{
+    unlock();
+    g_reporter.log("Quitting.");
+    close_server();
+    exit(status);
+}

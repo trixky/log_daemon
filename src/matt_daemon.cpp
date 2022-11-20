@@ -6,14 +6,11 @@
 #include "locker.hpp"
 #include "server.hpp"
 
-void _exit(void)
-{
-    unlock();
-}
-
 void handle_signale(int sig)
 {
     g_reporter.log("Received shutdown signal");
+    close_server();
+    exit(EXIT_SUCCESS);
 }
 
 void register_signals(void)
@@ -46,8 +43,10 @@ int main()
 {
     lock();
     g_reporter.log("Started.");
-    start_server();
+    register_signals();
     daemonize();
+    create_server();
+    start_server();
 
-    return 0;
+    return EXIT_SUCCESS;
 }
