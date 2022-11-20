@@ -2,7 +2,7 @@
 
 int g_server_fd;
 
-/* accept_client accept or not a new client.  */
+/* accept_client try to accept a new client.  */
 int accept_client(struct sockaddr_in *client, int sock_s)
 {
     size_t len;
@@ -14,20 +14,40 @@ int accept_client(struct sockaddr_in *client, int sock_s)
     return client_socket;
 }
 
+/* refuse_client refuses a client.  */
+void refuse_client(struct sockaddr_in *client, int sock_s)
+{
+    size_t len;
+    int client_socket;
+
+    len = sizeof(struct sockaddr_in);
+    if ((client_socket = accept(sock_s, (struct sockaddr *)client, (socklen_t *)&len)) < 0)
+        return;
+    close(client_socket);
+}
+
 /* handle_client handle new clients arriving.  */
 void handle_client(int sock_s, std::vector<int> &client_socks, fd_set &fd_list)
 {
     int client_socket;
     struct sockaddr_in client;
 
-    if ((client_socket = accept_client(&client, sock_s)) < 0)
+    if (client_socks.size() >= MAX_CONNECTIONS)
+    {
+        g_reporter.info(std::string("Client refused because: too many client connected. (max: " + (std::to_string(MAX_CONNECTIONS))) + ")");
+        refuse_client(&client, sock_s);
+    }
+    else if ((client_socket = accept_client(&client, sock_s)) < 0)
         g_reporter.info(std::string("Client not accepted: " + (std::string(strerror(errno)))));
     else
+    {
+        g_reporter.info(std::string("Client accepted."));
         client_socks.push_back(client_socket);
+    }
 }
 
 /* handle_request handle requests.  */
-int handle_request(std::vector<int> &client_socks, fd_set &fd_list)
+void handle_request(std::vector<int> &client_socks, fd_set &fd_list)
 {
     int offset;
     char buf[BUFSIZ];
@@ -44,8 +64,9 @@ int handle_request(std::vector<int> &client_socks, fd_set &fd_list)
             {
                 if (recv(client, buf + offset, 1, 0) <= 0)
                 {
+                    g_reporter.info(std::string("Client leave."));
                     close(client_socks[i]);
-                    client_socks.erase(std::next(client_socks.begin() + i));
+                    client_socks.erase(client_socks.begin() + i);
                     break;
                 }
                 if (buf[offset] == '\n')
@@ -78,7 +99,6 @@ int handle_request(std::vector<int> &client_socks, fd_set &fd_list)
             offset = 0;
         }
     }
-    return (0);
 }
 
 /* create_server create a new global server.  */
@@ -143,6 +163,7 @@ void start_server()
 
     while (1)
     {
+        sleep(1);
         max_sock = g_server_fd;
         FD_ZERO(&fd_list);
         FD_SET(g_server_fd, &fd_list);
@@ -164,7 +185,6 @@ void start_server()
         }
         if (FD_ISSET(g_server_fd, &fd_list))
             handle_client(g_server_fd, client_socks, fd_list);
-        if (handle_request(client_socks, fd_list))
-            return;
+        handle_request(client_socks, fd_list);
     }
 }

@@ -15,8 +15,9 @@
 #define REQUEST_BUFF_SIZE 1024
 
 int accept_client(struct sockaddr_in *client, int sock_s);
+void refuse_client(struct sockaddr_in *client, int sock_s);
 void handle_client(int sock_s, std::vector<int> &client_socks, fd_set &fd_list);
-int handle_request(std::vector<int> &client_socks, fd_set &fd_list);
+void handle_request(std::vector<int> &client_socks, fd_set &fd_list);
 void create_server(void);
 void close_server(void);
 void start_server(void);

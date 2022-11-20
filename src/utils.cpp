@@ -18,16 +18,13 @@ std::string get_time()
 
 void _exit(int status, bool unlock_mode, bool server_mode)
 {
-    printf("on se bar 1\n");
     if (unlock_mode)
     {
-        printf("on se bar 2\n");
         unlock();
     }
     g_reporter.info("Quitting.");
     if (server_mode)
     {
-        printf("on se bar 3\n");
         close_server();
     }
     exit(status);
