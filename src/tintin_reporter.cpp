@@ -37,7 +37,7 @@ void Tintin_reporter::setpath(const char *path)
     }
 }
 
-void Tintin_reporter::log(std::string message)
+void Tintin_reporter::print(std::string type, std::string msg)
 {
     if (this->file < 0)
         // If the log file is not set
@@ -48,10 +48,12 @@ void Tintin_reporter::log(std::string message)
         std::string log = get_time();
 
         // Concat the mode
-        log += "[ LOG ] - ";
+        log += "[ ";
+        log += type;
+        log += " ] - Matt_daemon: ";
 
         // Concat the message to log
-        log += message;
+        log += msg;
         log += "\n";
 
         // Write the log in the log file
@@ -62,6 +64,16 @@ void Tintin_reporter::log(std::string message)
             exit(EXIT_FAILURE);
         }
     }
+}
+
+void Tintin_reporter::info(std::string msg)
+{
+    this->print("INFO", msg);
+}
+
+void Tintin_reporter::log(std::string msg)
+{
+    this->print("LOG", msg);
 }
 
 Tintin_reporter::~Tintin_reporter(void)

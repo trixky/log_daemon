@@ -21,7 +21,7 @@ void handle_client(int sock_s, std::vector<int> &client_socks, fd_set &fd_list)
     struct sockaddr_in client;
 
     if ((client_socket = accept_client(&client, sock_s)) < 0)
-        g_reporter.log(std::string("Client not accepted: " + (std::string(strerror(errno)))));
+        g_reporter.info(std::string("Client not accepted: " + (std::string(strerror(errno)))));
     else
         client_socks.push_back(client_socket);
 }
@@ -67,12 +67,12 @@ int handle_request(std::vector<int> &client_socks, fd_set &fd_list)
                 if (msg.compare("quit") == 0)
                 {
                     close_server();
-                    g_reporter.log("Request quit.");
-                    _exit(EXIT_SUCCESS);
+                    g_reporter.info("Request quit.");
+                    _exit(EXIT_SUCCESS, true, true);
                 }
                 else
                 {
-                    g_reporter.log(std::string("Message received: " + msg));
+                    g_reporter.log(std::string(msg));
                 }
             }
             offset = 0;
@@ -84,15 +84,15 @@ int handle_request(std::vector<int> &client_socks, fd_set &fd_list)
 /* create_server create a new global server.  */
 void create_server(void)
 {
-    g_reporter.log("Creating server.");
+    g_reporter.info("Creating server.");
 
     struct sockaddr_in server;
 
     if ((g_server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
-        g_reporter.log("Failed to create the main socket\n");
+        g_reporter.info("Failed to create the main socket\n");
         fprintf(stderr, "Failed to create the main socket\n");
-        _exit(EXIT_FAILURE);
+        _exit(EXIT_FAILURE, true, false);
     }
 
     int opt = 1;
@@ -100,9 +100,9 @@ void create_server(void)
     if (setsockopt(g_server_fd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0)
     {
         close_server();
-        g_reporter.log("Failed to set options to the main socket\n");
+        g_reporter.info("Failed to set options to the main socket\n");
         fprintf(stderr, "Failed to set options to the main socket\n");
-        _exit(EXIT_FAILURE);
+        _exit(EXIT_FAILURE, true, true);
     }
 
     server.sin_family = PF_INET;
@@ -112,20 +112,20 @@ void create_server(void)
     if (bind(g_server_fd, (struct sockaddr *)&server, sizeof(server)) < 0)
     {
         close_server();
-        g_reporter.log("Failed to bind the main socket\n");
+        g_reporter.info("Failed to bind the main socket\n");
         fprintf(stderr, "Failed to bind the main socket\n");
-        _exit(EXIT_FAILURE);
+        _exit(EXIT_FAILURE, true, true);
     }
 
     if (listen(g_server_fd, BACK_LOG))
     {
         close_server();
-        g_reporter.log("Failed to listen the main socket\n");
+        g_reporter.info("Failed to listen the main socket\n");
         fprintf(stderr, "Failed to listen the main socket\n");
-        _exit(EXIT_FAILURE);
+        _exit(EXIT_FAILURE, true, true);
     }
 
-    g_reporter.log("Server created.");
+    g_reporter.info("Server created.");
 }
 
 /* create_server close the global server.  */
@@ -157,9 +157,9 @@ void start_server()
         {
             close_server();
             const std::string select_error_msg = std::string("Failed to select: " + (std::string(strerror(errno))));
-            g_reporter.log(select_error_msg);
+            g_reporter.info(select_error_msg);
             fprintf(stderr, select_error_msg.c_str());
-            _exit(EXIT_FAILURE);
+            _exit(EXIT_FAILURE, true, true);
             return;
         }
         if (FD_ISSET(g_server_fd, &fd_list))

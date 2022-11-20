@@ -8,7 +8,7 @@
 
 void handle_signale(int sig)
 {
-    g_reporter.log("Received shutdown signal");
+    g_reporter.info("Received shutdown signal");
     close_server();
     exit(EXIT_SUCCESS);
 }
@@ -22,27 +22,27 @@ void register_signals(void)
 
 void daemonize(void)
 {
-    g_reporter.log("Entering Daemon mode.");
+    g_reporter.info("Entering Daemon mode.");
 
     int pid = fork();
     if (pid < 0)
-        _exit(EXIT_FAILURE);
+        _exit(EXIT_FAILURE, false, false);
     if (pid > 0)
-        _exit(EXIT_SUCCESS);
+        _exit(EXIT_SUCCESS, false, false);
     if (setsid() < 0)
-        _exit(EXIT_FAILURE);
+        _exit(EXIT_FAILURE, false, false);
     umask(0);
     fclose(stdout);
     fclose(stderr);
     fclose(stdin);
 
-    g_reporter.log(std::string("Daemon Started. PID " + (std::to_string(getpid()))));
+    g_reporter.info(std::string("Daemon Started. PID " + (std::to_string(getpid()))));
 }
 
 int main()
 {
     lock();
-    g_reporter.log("Started.");
+    g_reporter.info("Started.");
     register_signals();
     daemonize();
     create_server();

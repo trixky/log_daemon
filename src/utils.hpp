@@ -10,6 +10,6 @@
 #include "server.hpp"
 
 std::string get_time();
-void _exit(int status);
+void _exit(int status, bool unlock_mode, bool server_mode);
 
 #endif

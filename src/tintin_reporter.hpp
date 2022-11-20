@@ -14,6 +14,7 @@ class Tintin_reporter
 {
 private:
     int file;
+    void print(std::string type, std::string msg);
 
 public:
     Tintin_reporter(void);
@@ -21,7 +22,8 @@ public:
     ~Tintin_reporter(void);
 
     void setpath(const char *path);
-    void log(std::string log);
+    void log(std::string msg);
+    void info(std::string msg);
 };
 
 extern Tintin_reporter g_reporter;
