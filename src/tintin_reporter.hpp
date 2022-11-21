@@ -5,8 +5,8 @@
 #include <iostream>
 #include <sys/stat.h>
 
-#define DEFAULT_PATH_DIRECTORY "/var/log/matt_daemon"
-#define DEFAULT_PATH "/var/log/matt_daemon/matt_daemon.log"
+#define DEFAULT_PATH_DIRECTORY "/var/log/log_daemon"
+#define DEFAULT_PATH "/var/log/log_daemon/log_daemon.log"
 
 class Tintin_reporter
 {

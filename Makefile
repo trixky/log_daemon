@@ -1,7 +1,7 @@
 CC = g++
 LDFLAGS = -Wall -Wextra -Werror -std=c++11 -Wno-unused-parameter
 
-TARGET_EXEC ?= a.out
+TARGET_EXEC ?= log_daemon
 
 BUILD_DIR ?= ./build
 SRC_DIRS ?= ./src

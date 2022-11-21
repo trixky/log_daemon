@@ -50,7 +50,7 @@ void Tintin_reporter::print(std::string type, std::string msg)
         // Concat the mode
         log += "[ ";
         log += type;
-        log += " ] - Matt_daemon: ";
+        log += " ] - log_daemon: ";
 
         // Concat the message to log
         log += msg;

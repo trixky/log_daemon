@@ -7,7 +7,7 @@
 #include <sys/file.h>
 #include <unistd.h>
 
-#define LOCK_FILE "/var/lock/matt-daemon.lock"
+#define LOCK_FILE "/var/lock/log_daemon.lock"
 
 void lock(void);
 void unlock(void);
