@@ -1,4 +1,5 @@
 #include "./locker.hpp"
+#include "tintin_reporter.hpp"
 
 int g_fd;
 
@@ -12,6 +13,7 @@ void lock(void)
     {
         // If lock file opening / creation failed
         fprintf(stderr, "Lock file opening failed.\n");
+        g_reporter.error("Error file locked.");
         exit(EXIT_FAILURE);
     }
 
@@ -20,6 +22,7 @@ void lock(void)
         // If lock file locking failed
         fprintf(stderr, "Lock file locking failed.\n");
         close(g_fd);
+        g_reporter.error("Error file locked.");
         exit(EXIT_FAILURE);
     }
 }
@@ -27,7 +30,6 @@ void lock(void)
 /* unlock unlocks the lock file */
 void unlock(void)
 {
-    printf("on exit par le unlock enfait");
     // Unlink the lock file
     unlink(LOCK_FILE);
     // Unlock the lock file

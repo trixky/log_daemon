@@ -10,7 +10,8 @@
 /* handle_shutdown_signale handles shutdown signals */
 void handle_shutdown_signale(int sig)
 {
-    g_reporter.info("Received shutdown signal");
+    g_reporter.info("Received shutdown signal.");
+    g_reporter.info("Quitting.");
     close_server();
     exit(EXIT_SUCCESS);
 }

@@ -10,18 +10,18 @@ Tintin_reporter::Tintin_reporter(void)
     mkdir(DEFAULT_PATH_DIRECTORY, 0755);
 
     // Set the (default) path of the log file
-    this->setpath(DEFAULT_PATH);
+    this->setpath(DEFAULT_PATH, DEFAULT_PATH_DIRECTORY);
 }
 
-Tintin_reporter::Tintin_reporter(const char *path)
+Tintin_reporter::Tintin_reporter(const char *path, const char *path_directory)
 {
     this->file = -1;
 
     // Set the path of the log file
-    this->setpath(path);
+    this->setpath(path, path_directory);
 }
 
-void Tintin_reporter::setpath(const char *path)
+void Tintin_reporter::setpath(const char *path, const char *path_directory)
 {
     // Close the potential opened current log file
     close(this->file);
@@ -33,6 +33,12 @@ void Tintin_reporter::setpath(const char *path)
     {
         // If an error occured from the log file
         fprintf(stderr, "can't open log file [%s]\n", path);
+        exit(EXIT_FAILURE);
+    }
+
+    if (chdir(path_directory) != 0)
+    {
+        fprintf(stderr, "can't change the current directory to the log file location [%s]\n", path);
         exit(EXIT_FAILURE);
     }
 }
@@ -50,7 +56,7 @@ void Tintin_reporter::print(std::string type, std::string msg)
         // Concat the mode
         log += "[ ";
         log += type;
-        log += " ] - log_daemon: ";
+        log += " ] - Matt_daemon: ";
 
         // Concat the message to log
         log += msg;
@@ -73,7 +79,12 @@ void Tintin_reporter::info(std::string msg)
 
 void Tintin_reporter::log(std::string msg)
 {
-    this->print("LOG", msg);
+    this->print("LOG", "User input: " + msg);
+}
+
+void Tintin_reporter::error(std::string msg)
+{
+    this->print("ERROR", msg);
 }
 
 Tintin_reporter::~Tintin_reporter(void)

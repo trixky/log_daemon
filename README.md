@@ -1,4 +1,4 @@
-# log_daemon
+# matt_daemon
 
 A daemon that reads the messages it receives through tcp connections and writes them to a log file.
 
@@ -10,14 +10,14 @@ A daemon that reads the messages it receives through tcp connections and writes 
 
 ```
 make
-sudo ./build/log_daemon
-ps aux | grep log_daemon
+sudo ./build/matt_daemon
+ps aux | grep matt_daemon
 nc localhost 4242
 test
 quit
 
-ps aux | grep log_daemon
-cat /var/log/log_daemon/log_daemon.log
+ps aux | grep matt_daemon
+cat /var/log/matt_daemon/matt_daemon.log
 ```
 
 > The program will have to run only with the root rights.
